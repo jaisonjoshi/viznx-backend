@@ -11,13 +11,44 @@ const DeviceSchema = mongoose.Schema({
     require: true,
   },
   password: { type: String, required: true },
+  // total playhours denote the time in minutes the device was on during a day
   totalPlayHrs: { type: Number, default: 0 },
+  
   location: { type: String, required: true },
   // adsHistory -> array of ads such that each ad with how much time this device plays and playHrs
   // Should I add operator attr for tracking which operator set this device ?
   morningQueues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }],
   noonQueues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }],
   eveningQueues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }],
+  // Device queue: (common to morning,noon and evening queues)
+  //      [{
+              id:{
+                type: ObjectId
+              },
+              name: {
+                type: String
+              },
+              url: {
+                type: String
+              },
+              operatorName:{
+                type:String
+              },
+              noOfTimesPlayed: {
+                type:Number,
+                default:0
+              },
+              startDate: {
+                type:Date
+              },
+              endDate: {
+                type:Date
+              }
+
+
+  //      }]
+  //
+
 });
 
 DeviceSchema.methods.matchPassword = async function (enteredPassword) {
