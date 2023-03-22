@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import isURL from "validator/lib/isURL";
 
-const AdsSchema = mongoose.Schema({
+const AdSchema = mongoose.Schema({
   name: {
     type: String,
     require: true,
@@ -15,6 +15,6 @@ const AdsSchema = mongoose.Schema({
   // should we add the devices that plays this ad in here or create another function for this
 });
 
-const Ads = mongoose.models.Ads || mongoose.model("Ads", AdsSchema);
+const Ad = mongoose.models.Ads || mongoose.model("Ad", AdSchema);
 
-export default Ads;
+export default Ad;

@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const Queue = mongoose.Schema({
+  ad: { type: mongoose.Types.Schema.ObjectId, ref: "Ad" },
+  operatorId: { type: String },
+});
+
 const DeviceSchema = mongoose.Schema({
   deviceId: {
     type: String,
@@ -14,26 +19,13 @@ const DeviceSchema = mongoose.Schema({
 
   password: { type: String, required: true },
 
-  totalPlayHrs: { type: Number, default: 0 },
-
   location: { type: String, required: true },
-  // adsHistory -> array of ads such that each ad with how much time this device plays and playHrs
-  adsHistory: [
-    {
-      adId: { type: mongoose.Schema.Types.ObjectId, ref: "Ads" },
-      totalPlays: { type: Number },
-      totalPlayHrs: { type: Number },
-    },
-  ],
-  // Should I add operator attr for tracking which operator set this device ?
 
-  operator: { type: mongoose.Schema.Types.ObjectId, ref: "Operator" },
+  // Array of objects with ad
 
-  morningQueues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }],
-
-  noonQueues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }],
-
-  eveningQueues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }],
+  morningQueue: [Queue],
+  noonQueue: [Queue],
+  eveningQueue: [Queue],
 });
 
 DeviceSchema.methods.matchPassword = async function (enteredPassword) {

@@ -1,11 +1,35 @@
 import mongoose from "mongoose";
 import isEmail from "validator/lib/isEmail";
 
+const DeployedDevices = mongoose.Schema({
+  device: { type: mongoose.Schema.Types.ObjectId, ref: "Device" },
+  name: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+  session: {
+    sessionType: {
+      type: String,
+      required: true,
+      enum: ["morning", "afternoon", "evening"],
+    },
+    noOfTimesPlayed: { type: String, default: 0 },
+  },
+});
+
 const OperatorSchema = mongoose.Schema({
   name: { type: String, required: true },
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
     index: true,
     unique: true,
     validate: isEmail,
@@ -14,6 +38,14 @@ const OperatorSchema = mongoose.Schema({
   location: { type: String, required: true },
   passwordResetToken: String,
   passwordResetExpires: Date,
+
+  // ads under operator and the devices that runs
+  adsUnderOperator: [
+    {
+      ad: { type: mongoose.Schema.Types.ObjectId, ref: "Ad" },
+      deployedDevices: [DeployedDevices],
+    },
+  ],
 });
 
 OperatorSchema.methods.matchPassword = async function (enteredPassword) {
