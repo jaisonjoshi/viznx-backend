@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import isEmail from "validator/lib/isEmail";
+import bcrypt from "bcrypt";
+import isEmail from "validator/lib/isEmail.js";
 
 const DeployedDevices = mongoose.Schema({
   device: { type: mongoose.Schema.Types.ObjectId, ref: "Device" },

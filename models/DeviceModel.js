@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-
+import bcrypt from "bcrypt";
 const Queue = mongoose.Schema({
-  ad: { type: mongoose.Types.Schema.ObjectId, ref: "Ad" },
+  ad: { type: mongoose.Types.ObjectId, ref: "Ad" },
   operatorId: { type: String },
 });
 
@@ -10,6 +10,7 @@ const DeviceSchema = mongoose.Schema({
     type: String,
     require: true,
     unique: [true, "device id is already taken"],
+    index: true,
   },
 
   name: {

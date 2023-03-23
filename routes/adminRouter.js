@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { adminLogin, adminSignUp } from "../controllers/adminController.js";
+import {
+  adminLogin,
+  adminSignUp,
+  createDevice,
+  createOperator,
+} from "../controllers/adminController.js";
+import { isAuthAdmin } from "../middlewares/middlewares.js";
 
 const adminRouter = Router();
 
@@ -17,6 +23,14 @@ adminRouter.post("/login", adminLogin);
 
 // @desc create operator
 // @route POST /api/admin/create-operator
-// @access access
+// @access Private
+
+adminRouter.post("/create-operator", isAuthAdmin, createOperator);
+
+// @desc create device
+// @route POST /api/admin/create-device
+// @access Private
+
+adminRouter.post("/create-device", isAuthAdmin, createDevice);
 
 export default adminRouter;

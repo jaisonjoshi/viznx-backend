@@ -1,5 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import Admin from "../models/adminModel.js";
+import Device from "../models/DeviceModel.js";
+import Operator from "../models/OperatorModel.js";
 import generateToken from "../utils/utils.js";
 
 // @desc Register a admin , NB:There is only one admin user here
@@ -70,9 +72,83 @@ export const adminLogin = expressAsyncHandler(async (req, res) => {
       });
       res.status(201).json(admin.toJSON());
     } else {
-      res.status(401).json({ message: "invalid password or email" });
+      res.status(401);
+      throw new Error("invalid password or email");
     }
   } catch (error) {
     throw new Error(error.message);
+  }
+});
+
+// @desc create operator
+// @access private
+
+export const createOperator = expressAsyncHandler(async (req, res) => {
+  const { name, email, password, location } = req.body;
+
+  if (!name || !email || !password || !location) {
+    return res.status(200).json({
+      message: "Operator fields are required",
+    });
+  }
+
+  try {
+    const operatorExists = await Operator.findOne({ email });
+
+    if (operatorExists) {
+      res.status(409);
+      throw new Error("Operator already exists");
+    }
+
+    const operator = await Operator.create({
+      name,
+      email,
+      password,
+      location,
+    });
+
+    if (operator) {
+      res.status(201).json({
+        message: "Operator creation success",
+      });
+    }
+  } catch (error) {
+    throw new Error(
+      error.message ? error.message : "Internal server error,try again"
+    );
+  }
+});
+
+// @desc create a device
+// @access Private
+
+export const createDevice = expressAsyncHandler(async (req, res) => {
+  const { deviceId, name, password, location } = req.body;
+
+  if (!deviceId || !name || !password || !location) {
+    return res.status(200).json({
+      message: "Device fields are required",
+    });
+  }
+
+  try {
+    const deviceExists = await Device.findOne({ deviceId, name });
+
+    if (deviceExists) {
+      res.status(409);
+      throw new Error("Device already exists");
+    }
+
+    const device = await Device.create({ deviceId, name, password, location });
+
+    if (device) {
+      res.status(201).json({
+        message: "Device creation success",
+      });
+    }
+  } catch (error) {
+    throw new Error(
+      error.message ? error.message : "Internal server error,try again"
+    );
   }
 });
