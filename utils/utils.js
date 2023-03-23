@@ -6,4 +6,8 @@ const generateToken = (id) => {
     expiresIn: maxAge,
   });
 };
+
+export const generateTokenForDevice = (id) =>
+  jwt.sign({ id }, config.JWT_SECRET);
+
 export default generateToken;

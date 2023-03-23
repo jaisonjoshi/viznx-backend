@@ -32,6 +32,17 @@ const DeviceSchema = mongoose.Schema({
 DeviceSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+DeviceSchema.methods.toJSON = function () {
+  const device = this;
+  const deviceObj = device.toObject();
+  delete deviceObj.password;
+  if (deviceObj.passwordResetToken) delete deviceObj.passwordResetToken;
+  if (deviceObj.passwordResetExpires) delete deviceObj.passwordResetExpires;
+
+  return deviceObj;
+};
+
 DeviceSchema.pre("save", async function (next) {
   // if not password modified (if an existed device updates the email and name)
   if (!this.isModified("password")) return next();
