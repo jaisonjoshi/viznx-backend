@@ -52,6 +52,17 @@ const OperatorSchema = mongoose.Schema({
 OperatorSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+OperatorSchema.methods.toJSON = function () {
+  const operator = this;
+  const operatorObj = operator.toObject();
+  delete operatorObj.password;
+  if (operatorObj.passwordResetToken) delete operatorObj.passwordResetToken;
+  if (operatorObj.passwordResetExpires) delete operatorObj.passwordResetExpires;
+
+  return operatorObj;
+};
+
 OperatorSchema.pre("save", async function (next) {
   // if not password modified (if an existed user updates the email and name)
   if (!this.isModified("password")) return next();

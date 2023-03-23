@@ -4,7 +4,7 @@ import config from "../config.js";
 import Admin from "../models/adminModel.js";
 
 const notFound = (req, res, next) => {
-  const err = new Error(`Error 404 :${req.url} not found`);
+  const err = new Error(`Error 404 : ${req.method} ${req.url} not found`);
   res.status(404);
   next(err);
 };
