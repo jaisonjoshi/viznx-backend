@@ -21,6 +21,7 @@ app.use(
 const PORT = process.env.PORT || 5000;
 connectDB();
 
+app.get("/", (req, res) => res.send("CONGRATS ,YOU SUMMONED VIZNX"));
 app.use("/api/admin", adminRouter);
 app.use("/api/operator", operatorRouter);
 app.use("/api/device", deviceRouter);
