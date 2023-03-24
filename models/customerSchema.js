@@ -2,17 +2,13 @@ import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import crypto from "crypto";
 import isEmail from "validator/lib/isEmail";
+import Ad from "./AdModel";
 
 const Queue = new mongoose.Schema({
   title: { type: String, required: true },
   url: { type: String, required: true },
   totalPlayHrs: { type: String, default: "0min" },
   totalPlay: { type: Number, required: true, default: 0 },
-});
-
-const Device = new mongoose.Schema({
-  name: { type: String, required: true },
-  totalPlayHrs: { type: Number, required: true, default: "0" },
 });
 
 const CustomerSchema = new mongoose.Schema({
@@ -25,8 +21,15 @@ const CustomerSchema = new mongoose.Schema({
     validate: isEmail,
   },
   password: { type: String, required: true },
+  ads: [Ad],
   queue: [Queue],
-  devices: [Device],
+  devices: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Device",
+      totalPlayHrs: { type: Number, default: "0" },
+    },
+  ],
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
