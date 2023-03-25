@@ -70,7 +70,7 @@ export const customerLogin = expressAsyncHandler(async (req, res) => {
         httpOnly: true,
         maxAge: maxAge * 1000,
       });
-      res.status(201).json(customer.toJSON());
+      res.status(200).json(customer.toJSON());
     } else {
       res.status(401);
       throw new Error("Invalid email or password");
