@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import isURL from "validator/lib/isURL.js";
 
-const AdSchema = mongoose.Schema({
+export const AdSchema = mongoose.Schema({
   name: {
     type: String,
     require: true,

@@ -1,8 +1,8 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import crypto from "crypto";
-import isEmail from "validator/lib/isEmail";
-import Ad from "./AdModel";
+import isEmail from "validator/lib/isEmail.js";
+import { AdSchema } from "./AdModel.js";
 
 const Queue = new mongoose.Schema({
   title: { type: String, required: true },
@@ -21,7 +21,7 @@ const CustomerSchema = new mongoose.Schema({
     validate: isEmail,
   },
   password: { type: String, required: true },
-  ads: [Ad],
+  ads: [AdSchema],
   queue: [Queue],
   devices: [
     {
@@ -37,6 +37,17 @@ const CustomerSchema = new mongoose.Schema({
 CustomerSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+CustomerSchema.methods.toJSON = function () {
+  const customer = this;
+  const customerObj = customer.toObject();
+  delete customerObj.password;
+  if (customerObj.passwordResetToken) delete customerObj.passwordResetToken;
+  if (customerObj.passwordResetExpires) delete customerObj.passwordResetExpires;
+
+  return customerObj;
+};
+
 CustomerSchema.pre("save", async function (next) {
   // if not password modified (if an existed user updates the email and name)
   if (!this.isModified("password")) return next();

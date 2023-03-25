@@ -1,4 +1,9 @@
 import expressAsyncHandler from "express-async-handler";
+import Customer from "../models/customerSchema.js";
+import generateToken from "../utils/utils.js";
+
+// @desc customer signup
+// @access Private
 
 export const customerSignUp = expressAsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -10,34 +15,62 @@ export const customerSignUp = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    const adminData = await Admin.countDocuments({});
-    console.log(adminData);
-    if (adminData > 0) {
+    const customerExists = await Customer.findOne({ email });
+
+    if (customerExists) {
       res.status(400);
-      throw new Error("There is already an admin");
+      throw new Error(`Customer with email id ${email} is already exists`);
     }
-    const admin = await Admin.create({
+    const customer = await Customer.create({
       name,
       email,
       password,
     });
-    if (admin) {
+    if (customer) {
       const maxAge = 3 * 24 * 60 * 60;
-      const token = generateToken(admin._id);
+      const token = generateToken(customer._id);
       res.cookie("Viznx_Secure_Session_ID", token, {
         httpOnly: true,
         maxAge: maxAge * 1000,
       });
-      res.status(201).json({
-        _id: admin._id,
-        name: admin.name,
-        email: admin.email,
-      });
+      res.status(201).json(customer.toJSON());
     } else {
-      res.status(400);
-      throw new Error("Admin already exists");
+      res.status(500);
+      throw new Error("Oops, something is not working! try again");
     }
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.message ? error.message : "Internal server error");
+  }
+});
+
+// @desc customer login
+// @access Private
+
+export const customerLogin = expressAsyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(200).json({
+      message: "Customer fields are required",
+    });
+  }
+
+  try {
+    const customer = await Customer.findOne({ email });
+
+    if (customer && (await customer.matchPassword(password))) {
+      const maxAge = 3 * 24 * 60 * 60;
+      const token = generateToken(customer._id);
+      res.cookie("Viznx_Secure_Session_ID", token, {
+        httpOnly: true,
+        maxAge: maxAge * 1000,
+      });
+      res.status(201).json(customer.toJSON());
+    } else {
+      res.status(401);
+      throw new Error("Invalid email or password");
+    }
+  } catch (error) {
+    throw new Error(error.message ? error.message : "Internal server error");
   }
 });
