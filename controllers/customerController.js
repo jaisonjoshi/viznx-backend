@@ -58,6 +58,11 @@ export const customerLogin = expressAsyncHandler(async (req, res) => {
   try {
     const customer = await Customer.findOne({ email });
 
+    if (!customer) {
+      res.status(404);
+      throw new Error("Invalid email");
+    }
+
     if (customer && (await customer.matchPassword(password))) {
       const maxAge = 3 * 24 * 60 * 60;
       const token = generateToken(customer._id);
