@@ -4,14 +4,23 @@ import isURL from "validator/lib/isURL.js";
 export const AdSchema = mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
   },
   url: {
     type: String,
-    require: true,
+    required: true,
     validate: isURL,
   },
-
+  operator: {
+    type: mongoose.Types.ObjectId,
+    ref: "Operator",
+    required: true,
+  },
+  customer: {
+    type: mongoose.Types.ObjectId,
+    ref: "Customer",
+    required: true,
+  },
   // should we add the devices that plays this ad in here or create another function for this
 });
 

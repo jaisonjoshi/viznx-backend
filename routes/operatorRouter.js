@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { operatorLogin } from "../controllers/operatorController.js";
+import {
+  addTheAdToQueue,
+  operatorLogin,
+} from "../controllers/operatorController.js";
+import { isAuthOperator } from "../middlewares/middlewares.js";
 
 const operatorRouter = Router();
 
@@ -12,5 +16,7 @@ operatorRouter.post("/login", operatorLogin);
 // @desc create queue by adding the ads to devices
 // @route POST /api/operator/create-queue
 // @access Private
+
+operatorRouter.post("/create-queue", isAuthOperator, addTheAdToQueue);
 
 export default operatorRouter;

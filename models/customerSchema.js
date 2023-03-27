@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import crypto from "crypto";
 import isEmail from "validator/lib/isEmail.js";
-import { AdSchema } from "./AdModel.js";
 
 const Queue = new mongoose.Schema({
   title: { type: String, required: true },
@@ -21,8 +20,12 @@ const CustomerSchema = new mongoose.Schema({
     validate: isEmail,
   },
   password: { type: String, required: true },
-  ads: [AdSchema],
-  queue: [Queue],
+  ads: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Ad",
+    },
+  ],
   devices: [
     {
       type: mongoose.Types.ObjectId,

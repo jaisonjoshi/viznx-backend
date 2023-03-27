@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 const Queue = mongoose.Schema({
   ad: { type: mongoose.Types.ObjectId, ref: "Ad" },
-  operatorId: { type: String },
+  operator: { type: mongoose.Types.ObjectId, ref: "Operator" },
 });
 
 const DeviceSchema = mongoose.Schema({

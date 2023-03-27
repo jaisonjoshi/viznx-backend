@@ -4,10 +4,7 @@ import isEmail from "validator/lib/isEmail.js";
 
 const DeployedDevices = mongoose.Schema({
   device: { type: mongoose.Schema.Types.ObjectId, ref: "Device" },
-  name: {
-    type: String,
-    required: true,
-  },
+
   startDate: {
     type: Date,
     required: true,
@@ -20,7 +17,7 @@ const DeployedDevices = mongoose.Schema({
     sessionType: {
       type: String,
       required: true,
-      enum: ["morning", "afternoon", "evening"],
+      enum: ["morning", "noon", "evening"],
     },
     noOfTimesPlayed: { type: String, default: 0 },
   },
@@ -43,7 +40,7 @@ const OperatorSchema = mongoose.Schema({
   // ads under operator and the devices that runs
   adsUnderOperator: [
     {
-      ad: { type: mongoose.Schema.Types.ObjectId, ref: "Ad" },
+      ad: { type: mongoose.Schema.Types.ObjectId, ref: "Ad", index: true },
       deployedDevices: [DeployedDevices],
     },
   ],
