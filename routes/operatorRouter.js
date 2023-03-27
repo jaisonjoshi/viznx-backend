@@ -17,6 +17,6 @@ operatorRouter.post("/login", operatorLogin);
 // @route POST /api/operator/create-queue
 // @access Private
 
-operatorRouter.post("/create-queue", isAuthOperator, addTheAdToQueue);
+operatorRouter.post("/create-queue", addTheAdToQueue);
 
 export default operatorRouter;
