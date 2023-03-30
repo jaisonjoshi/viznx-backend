@@ -92,9 +92,7 @@ const isAuthOperator = expressAsyncHandler(async (req, res, next) => {
   } else {
     res.status(401);
 
-    throw new Error(
-      "Your session maybe expired or become invalid! Try to login again"
-    );
+    throw new Error(error.message ? error.message : "Not authorized");
   }
 });
 
