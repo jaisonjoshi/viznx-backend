@@ -11,7 +11,13 @@ import customerRouter from "./routes/customerRouter.js";
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors());
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(
