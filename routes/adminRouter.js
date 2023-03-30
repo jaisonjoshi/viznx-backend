@@ -6,6 +6,7 @@ import {
   createOperator,
 } from "../controllers/adminController.js";
 import { fetchDevices } from "../controllers/deviceController.js";
+import { fetchOperators } from "../controllers/operatorController.js";
 import { isAuthAdmin } from "../middlewares/middlewares.js";
 
 const adminRouter = Router();
@@ -39,5 +40,11 @@ adminRouter.post("/create-device", isAuthAdmin, createDevice);
 // @access Private
 
 adminRouter.get("/load-admin-devices", isAuthAdmin, fetchDevices);
+
+// @desc fetch all the operators
+// @route GET /api/admin/load-admin-operators
+// @access Private
+
+adminRouter.get("/load-admin-operators", isAuthAdmin, fetchOperators);
 
 export default adminRouter;

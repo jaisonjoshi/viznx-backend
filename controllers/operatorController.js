@@ -251,3 +251,16 @@ export const addTheAdToQueue = expressAsyncHandler(async (req, res) => {
     throw new Error(error.message ? error.message : "Internal server error ");
   }
 });
+
+// @desc Get all operators
+// @route GET /api/operator/load-operators
+// @access Private
+
+export const fetchOperators = expressAsyncHandler(async (req, res) => {
+  try {
+    const operators = await Operator.find({}).select("name email location");
+    res.status(200).json(operators);
+  } catch (error) {
+    throw new Error(error.message ? error.message : "Internal server error");
+  }
+});
