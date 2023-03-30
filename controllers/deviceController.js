@@ -217,3 +217,15 @@ export const loadQueues = expressAsyncHandler(async (req, res) => {
     throw new Error(error.message ? error.message : "Internal server error ");
   }
 });
+
+// @desc Load all the devices
+// @access Private
+
+export const fetchDevices = expressAsyncHandler(async (req, res) => {
+  try {
+    const devices = await Device.find({}).select("deviceId name location ");
+    res.status(200).json(devices);
+  } catch (error) {
+    throw new Error(error.message ? error.message : "Internal server Error");
+  }
+});

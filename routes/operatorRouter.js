@@ -3,6 +3,7 @@ import {
   addTheAdToQueue,
   operatorLogin,
 } from "../controllers/operatorController.js";
+import { fetchDevices } from "../controllers/deviceController.js";
 import { isAuthOperator } from "../middlewares/middlewares.js";
 
 const operatorRouter = Router();
@@ -18,5 +19,11 @@ operatorRouter.post("/login", operatorLogin);
 // @access Private
 
 operatorRouter.post("/create-queue", addTheAdToQueue);
+
+// @desc fetch all the devices
+// @route GET /api/operator/load-devices
+// @access Private
+
+operatorRouter.get("/load-devices", isAuthOperator, fetchDevices);
 
 export default operatorRouter;
