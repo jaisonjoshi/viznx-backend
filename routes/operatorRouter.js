@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   addTheAdToQueue,
+  loadProfile,
   operatorLogin,
 } from "../controllers/operatorController.js";
 import { fetchDevices } from "../controllers/deviceController.js";
@@ -26,4 +27,8 @@ operatorRouter.post("/create-queue", isAuthOperator, addTheAdToQueue);
 
 operatorRouter.get("/load-devices", isAuthOperator, fetchDevices);
 
+// @desc Fetch the Profile
+// @route Get /api/operator/profile
+// @access Private
+operatorRouter.get("/profile", isAuthOperator, loadProfile);
 export default operatorRouter;

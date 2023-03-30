@@ -264,3 +264,15 @@ export const fetchOperators = expressAsyncHandler(async (req, res) => {
     throw new Error(error.message ? error.message : "Internal server error");
   }
 });
+
+// @desc Get Profile of the operator
+// @access Private
+
+export const loadProfile = expressAsyncHandler(async (req, res) => {
+  try {
+    const operator = await Operator.findById(req.operator.id);
+    res.status(200).json(operator.toJSON());
+  } catch (error) {
+    throw new Error(error.message ? error.message : "Internal server error");
+  }
+});
