@@ -3,6 +3,7 @@ import {
   customerLogin,
   customerSignUp,
 } from "../controllers/customerController.js";
+import { logout } from "../controllers/otherController.js";
 
 const customerRouter = Router();
 
@@ -17,5 +18,10 @@ customerRouter.post("/signup", customerSignUp);
 // @access Private
 
 customerRouter.post("/login", customerLogin);
+
+// @desc Logout
+// @route DELETE /api/admins/logout
+// @access Private
+customerRouter.delete("/logout", logout("Viznx_Secure_Session_ID"));
 
 export default customerRouter;

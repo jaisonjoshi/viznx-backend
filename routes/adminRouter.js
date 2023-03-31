@@ -7,6 +7,7 @@ import {
 } from "../controllers/adminController.js";
 import { fetchDevices } from "../controllers/deviceController.js";
 import { fetchOperators } from "../controllers/operatorController.js";
+import { logout } from "../controllers/otherController.js";
 import { isAuthAdmin } from "../middlewares/middlewares.js";
 
 const adminRouter = Router();
@@ -22,6 +23,11 @@ adminRouter.post("/signup", adminSignUp);
 // @access Private
 
 adminRouter.post("/login", adminLogin);
+
+// @desc Logout
+// @route DELETE /api/admins/logout
+// @access Private
+adminRouter.delete("/logout", logout("Viznx_Secure_Session_ID"));
 
 // @desc create operator
 // @route POST /api/admin/create-operator

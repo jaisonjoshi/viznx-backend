@@ -6,6 +6,7 @@ import {
 } from "../controllers/operatorController.js";
 import { fetchDevices } from "../controllers/deviceController.js";
 import { isAuthOperator } from "../middlewares/middlewares.js";
+import { logout } from "../controllers/otherController.js";
 
 const operatorRouter = Router();
 
@@ -31,4 +32,9 @@ operatorRouter.get("/load-devices", isAuthOperator, fetchDevices);
 // @route Get /api/operator/profile
 // @access Private
 operatorRouter.get("/profile", isAuthOperator, loadProfile);
+
+// @desc Logout
+// @route DELETE /api/operator/logout
+// @access Private
+operatorRouter.delete("/logout", logout("Viznx_Secure_Session_ID"));
 export default operatorRouter;

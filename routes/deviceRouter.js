@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { deviceLogin, loadQueues } from "../controllers/deviceController.js";
+import { logout } from "../controllers/otherController.js";
 import { isAuthDevice } from "../middlewares/middlewares.js";
 
 const deviceRouter = Router();
@@ -15,5 +16,10 @@ deviceRouter.post("/login", deviceLogin);
 // @access Private
 
 deviceRouter.get("/load-queues", isAuthDevice, loadQueues);
+
+// @desc Logout
+// @route DELETE /api/admins/logout
+// @access Private
+deviceRouter.delete("/logout", logout("Viznx_Secure_Device_Session_ID"));
 
 export default deviceRouter;
