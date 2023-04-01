@@ -24,6 +24,9 @@ export const deviceLogin = expressAsyncHandler(async (req, res) => {
         httpOnly: true,
         maxAge: maxAge,
       });
+      res.cookie("Viznx_device_Status", device._id, {
+        maxAge: maxAge,
+      });
 
       const deviceInfo = await Device.findById(device._id)
         .populate("morningQueue.ad", "name url customer")

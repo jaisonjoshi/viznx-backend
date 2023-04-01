@@ -29,6 +29,9 @@ deviceRouter.get("/load-queues", isAuthDevice, loadQueues);
 // @desc Logout
 // @route DELETE /api/admins/logout
 // @access Private
-deviceRouter.delete("/logout", logout("Viznx_Secure_Device_Session_ID"));
+deviceRouter.delete(
+  "/logout",
+  logout("Viznx_Secure_Device_Session_ID", "Viznx_device_Status")
+);
 
 export default deviceRouter;

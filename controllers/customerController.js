@@ -33,6 +33,9 @@ export const customerSignUp = expressAsyncHandler(async (req, res) => {
         httpOnly: true,
         maxAge: maxAge * 1000,
       });
+      res.cookie("Viznx_customer_Status", customer._id, {
+        maxAge: maxAge * 1000,
+      });
       res.status(201).json(customer.toJSON());
     } else {
       res.status(500);

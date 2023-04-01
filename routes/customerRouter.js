@@ -22,6 +22,9 @@ customerRouter.post("/login", customerLogin);
 // @desc Logout
 // @route DELETE /api/admins/logout
 // @access Private
-customerRouter.delete("/logout", logout("Viznx_Secure_Session_ID"));
+customerRouter.delete(
+  "/logout",
+  logout("Viznx_Secure_Session_ID", "Viznx_customer_Status")
+);
 
 export default customerRouter;
