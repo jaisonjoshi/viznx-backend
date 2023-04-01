@@ -229,3 +229,15 @@ export const fetchDevices = expressAsyncHandler(async (req, res) => {
     throw new Error(error.message ? error.message : "Internal server Error");
   }
 });
+
+// @desc Get Profile of the device
+// @access Private
+
+export const loadProfile = expressAsyncHandler(async (req, res) => {
+  try {
+    const device = await Device.findById(req.device.id);
+    res.status(200).json(device.toJSON());
+  } catch (error) {
+    throw new Error(error.message ? error.message : "Internal server error");
+  }
+});
