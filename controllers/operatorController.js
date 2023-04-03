@@ -81,7 +81,7 @@ export const operatorLogin = expressAsyncHandler(async (req, res) => {
   }
 
   try {
-    const operator = await Operator.findOne({ email });
+    const operator = await Operator.findOne({ email }).populate("adsUnderOperator.ad");
 
     if (!operator) {
       res.status(404);
@@ -94,7 +94,7 @@ export const operatorLogin = expressAsyncHandler(async (req, res) => {
       res.cookie("Viznx_Secure_Session_ID", token, {
         httpOnly: true,
         maxAge: maxAge * 1000,
-        sameSite: "lax",
+        sameSite: "none",
         path: "/",
         secure: true,
       });

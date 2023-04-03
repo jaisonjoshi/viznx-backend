@@ -18,13 +18,13 @@ deviceRouter.post("/login", deviceLogin);
 // @desc Device Load Profile
 // @route POST /api/device/profile
 // @access Private
-deviceRouter.get("/profile", loadProfile);
+deviceRouter.get("/profile", isAuthDevice, loadProfile);
 
 // @desc Get all the videos for with respected queues
 // @route GET /api/device/load-queues
 // @access Private
 
-deviceRouter.get("/load-queues", loadQueues);
+deviceRouter.get("/load-queues", isAuthDevice, loadQueues);
 
 // @desc Logout
 // @route DELETE /api/admins/logout
