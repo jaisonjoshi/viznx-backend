@@ -94,6 +94,9 @@ export const operatorLogin = expressAsyncHandler(async (req, res) => {
       res.cookie("Viznx_Secure_Session_ID", token, {
         httpOnly: true,
         maxAge: maxAge * 1000,
+        sameSite: none,
+        path: "/",
+        secure: true,
       });
       res.cookie("Viznx_operator_Status", operator._id, {
         maxAge: maxAge * 1000,
@@ -273,7 +276,9 @@ export const fetchOperators = expressAsyncHandler(async (req, res) => {
 
 export const loadProfile = expressAsyncHandler(async (req, res) => {
   try {
-    const operator = await Operator.findById(req.operator.id).populate('adsUnderOperator.ad');
+    const operator = await Operator.findById(req.operator.id).populate(
+      "adsUnderOperator.ad"
+    );
     res.status(200).json(operator.toJSON());
   } catch (error) {
     throw new Error(error.message ? error.message : "Internal server error");
