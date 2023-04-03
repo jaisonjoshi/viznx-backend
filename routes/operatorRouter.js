@@ -33,6 +33,7 @@ operatorRouter.get("/load-devices", isAuthOperator, fetchDevices);
 // @access Private
 operatorRouter.get("/profile", isAuthOperator, loadProfile);
 
+
 // @desc Logout
 // @route DELETE /api/operator/logout
 // @access Private
