@@ -20,18 +20,18 @@ operatorRouter.post("/login", operatorLogin);
 // @route POST /api/operator/create-queue
 // @access Private
 
-operatorRouter.post("/create-queue", isAuthOperator, addTheAdToQueue);
+operatorRouter.post("/create-queue", addTheAdToQueue);
 
 // @desc fetch all the devices
 // @route GET /api/operator/load-devices
 // @access Private
 
-operatorRouter.get("/load-devices", isAuthOperator, fetchDevices);
+operatorRouter.get("/load-devices", fetchDevices);
 
 // @desc Fetch the Profile
 // @route Get /api/operator/profile
 // @access Private
-operatorRouter.get("/profile", isAuthOperator, loadProfile);
+operatorRouter.get("/profile", loadProfile);
 
 
 // @desc Logout
