@@ -27,7 +27,10 @@ adminRouter.post("/login", adminLogin);
 // @desc Logout
 // @route DELETE /api/admins/logout
 // @access Private
-adminRouter.delete("/logout", logout("Viznx_Secure_Session_ID"));
+adminRouter.delete(
+  "/logout",
+  logout("Viznx_Secure_Session_ID", "Viznx_admin_Status")
+);
 
 // @desc create operator
 // @route POST /api/admin/create-operator

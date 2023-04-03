@@ -34,6 +34,10 @@ export const adminSignUp = expressAsyncHandler(async (req, res) => {
         httpOnly: true,
         maxAge: maxAge * 1000,
       });
+
+      res.cookie("Viznx_admin_Status", admin._id, {
+        maxAge: maxAge * 1000,
+      });
       res.status(201).json({
         _id: admin._id,
         name: admin.name,
@@ -68,6 +72,9 @@ export const adminLogin = expressAsyncHandler(async (req, res) => {
       const token = generateToken(admin._id);
       res.cookie("Viznx_Secure_Session_ID", token, {
         httpOnly: true,
+        maxAge: maxAge * 1000,
+      });
+      res.cookie("Viznx_admin_Status", admin._id, {
         maxAge: maxAge * 1000,
       });
       res.status(201).json(admin.toJSON());

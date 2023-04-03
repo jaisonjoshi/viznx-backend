@@ -37,5 +37,8 @@ operatorRouter.get("/profile", isAuthOperator, loadProfile);
 // @desc Logout
 // @route DELETE /api/operator/logout
 // @access Private
-operatorRouter.delete("/logout", logout("Viznx_Secure_Session_ID"));
+operatorRouter.delete(
+  "/logout",
+  logout("Viznx_Secure_Session_ID", "Viznx_operator_Status")
+);
 export default operatorRouter;
