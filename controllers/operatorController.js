@@ -20,8 +20,7 @@ class DeviceNotUpdate extends Error {
   }
 }
 
-const addToDevices = async (session, devices, ad, operator) => {
-  const queueField = `${session.toLowerCase()}Queue`;
+const addToDevices = async (slot, devices, ad, operator, adFrequency) => {
   let sessionMong;
   try {
     sessionMong = await mongoose.startSession();
@@ -32,20 +31,42 @@ const addToDevices = async (session, devices, ad, operator) => {
 
   try {
     const updatePromises = devices.map(async (_id) => {
+      // check whether the ad is also present in the device
       const device = await Device.findOne({
         _id: new mongoose.Types.ObjectId(_id),
-        [queueField]: { $elemMatch: { ad: ad._id, operator: operator._id } },
+        slots: {
+          $elemMatch: {
+            name: slot,
+            "queue.ad": ad._id,
+            "queue.operator": operator._id,
+          },
+        },
       });
+
+      console.log(device);
       if (device) {
         return { _id }; // skip adding the device if it already exists in the array
       } else {
+        console.log("hello");
         const result = await Device.updateOne(
-          { _id: new mongoose.Types.ObjectId(_id) },
           {
-            $addToSet: { [queueField]: { ad: ad._id, operator: operator._id } },
+            _id: new mongoose.Types.ObjectId(_id),
+            slot: { $elemMatch: { name: slot } },
           },
-          { sessionMong }
+          {
+            $addToSet: {
+              "slots.$.queue": {
+                ad: ad._id,
+                operator: operator._id,
+                adFrequency: adFrequency,
+              },
+            },
+          },
+          { session: sessionMong }
         );
+
+        console.log("result" + result);
+
         if (result.nModified === 0) {
           throw new DeviceNotFound(`Device ${_id} not found`);
         } else {
@@ -115,8 +136,16 @@ export const operatorLogin = expressAsyncHandler(async (req, res) => {
 // @access Private
 
 export const addTheAdToQueue = expressAsyncHandler(async (req, res) => {
-  const { name, customerEmail, url, devices, startDate, endDate, session } =
-    req.body;
+  const {
+    name,
+    customerEmail,
+    url,
+    devices,
+    startDate,
+    endDate,
+    slot,
+    adFrequency,
+  } = req.body;
 
   if (
     !name ||
@@ -125,7 +154,8 @@ export const addTheAdToQueue = expressAsyncHandler(async (req, res) => {
     !devices ||
     !startDate ||
     !endDate ||
-    !session
+    !slot ||
+    !adFrequency
   ) {
     return res
       .status(200)
@@ -167,10 +197,11 @@ export const addTheAdToQueue = expressAsyncHandler(async (req, res) => {
 
     // set up the devices queue according to the session
     const successFullUpdate = await addToDevices(
-      session,
+      slot,
       devices,
       ad,
-      operator
+      operator,
+      adFrequency
     );
 
     if (
@@ -226,8 +257,8 @@ export const addTheAdToQueue = expressAsyncHandler(async (req, res) => {
           device: new mongoose.Types.ObjectId(deviceId),
           startDate: new Date(startDate),
           endDate: new Date(endDate),
-          session: {
-            sessionType: session,
+          slot: {
+            slotType: slot,
           },
         }))
       );
@@ -238,8 +269,8 @@ export const addTheAdToQueue = expressAsyncHandler(async (req, res) => {
           device: new mongoose.Types.ObjectId(deviceId),
           startDate: new Date(startDate),
           endDate: new Date(endDate),
-          session: {
-            sessionType: session,
+          slot: {
+            slotType: slot,
           },
         };
       });

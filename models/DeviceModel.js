@@ -1,32 +1,110 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-const Queue = mongoose.Schema({
+const QueueSchema = mongoose.Schema({
   ad: { type: mongoose.Types.ObjectId, ref: "Ad" },
   operator: { type: mongoose.Types.ObjectId, ref: "Operator" },
+  adFrequency: { type: Number, default: 1 },
 });
 
 const DeviceSchema = mongoose.Schema({
   deviceId: {
     type: String,
-    require: true,
-    unique: [true, "device id is already taken"],
+    required: true,
+    unique: true,
     index: true,
   },
-
   name: {
     type: String,
-    require: true,
+    required: true,
   },
-
-  password: { type: String, required: true },
-
-  location: { type: String, required: true },
-
-  // Array of objects with ad
-
-  morningQueue: [Queue],
-  noonQueue: [Queue],
-  eveningQueue: [Queue],
+  password: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  slots: {
+    type: [
+      {
+        name: {
+          type: String,
+          required: true,
+          enum: [
+            "slotOne",
+            "slotTwo",
+            "slotThree",
+            "slotFour",
+            "slotFive",
+            "slotSix",
+            "slotSeven",
+            "slotEight",
+            "slotNine",
+            "slotTen",
+          ],
+        },
+        queue: [QueueSchema],
+      },
+    ],
+    default: [
+      {
+        name: "slotOne",
+        queue: [],
+      },
+      {
+        name: "slotTwo",
+        queue: [],
+      },
+      {
+        name: "slotThree",
+        queue: [],
+      },
+      {
+        name: "slotFour",
+        queue: [],
+      },
+      {
+        name: "slotFive",
+        queue: [],
+      },
+      {
+        name: "slotSix",
+        queue: [],
+      },
+      {
+        name: "slotSeven",
+        queue: [],
+      },
+      {
+        name: "slotEight",
+        queue: [],
+      },
+      {
+        name: "slotNine",
+        queue: [],
+      },
+      {
+        name: "slotTen",
+        queue: [],
+      },
+    ],
+    validate: [
+      {
+        validator: function (slots) {
+          return slots.length <= 10;
+        },
+        message: "Device can only have a maximum of 10 slots.",
+      },
+      {
+        validator: function (slots) {
+          const slotNames = slots.map((slot) => slot.name);
+          return slotNames.length === new Set(slotNames).size;
+        },
+        message: "Slot names must be unique.",
+      },
+    ],
+  },
 });
 
 DeviceSchema.methods.matchPassword = async function (enteredPassword) {

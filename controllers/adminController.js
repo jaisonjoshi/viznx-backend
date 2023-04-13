@@ -73,15 +73,10 @@ export const adminLogin = expressAsyncHandler(async (req, res) => {
       res.cookie("Viznx_Secure_Session_ID", token, {
         httpOnly: true,
         maxAge: maxAge * 1000,
-        sameSite: "None",
-        path: "/",
-        secure: true,
       });
       res.cookie("Viznx_admin_Status", admin._id, {
         maxAge: maxAge * 1000,
-        sameSite: "None",
-        path: "/",
-        secure: true,
+        httpOnly: true,
       });
       res.status(201).json(admin.toJSON());
     } else {
@@ -158,6 +153,23 @@ export const createDevice = expressAsyncHandler(async (req, res) => {
       res.status(201).json({
         message: "Device creation success",
       });
+    }
+  } catch (error) {
+    throw new Error(
+      error.message ? error.message : "Internal server error,try again"
+    );
+  }
+});
+
+export const loadProfile = expressAsyncHandler(async (req, res) => {
+  try {
+    console.log(req.admin._id);
+    const admin = await Admin.findById(req.admin._id);
+    if (admin) {
+      return res.status(200).json(admin.toJSON());
+    } else {
+      res.status(403);
+      throw new Error("Bad request");
     }
   } catch (error) {
     throw new Error(

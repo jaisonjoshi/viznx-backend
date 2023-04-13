@@ -4,6 +4,7 @@ import {
   adminSignUp,
   createDevice,
   createOperator,
+  loadProfile,
 } from "../controllers/adminController.js";
 import { fetchDevices } from "../controllers/deviceController.js";
 import { fetchOperators } from "../controllers/operatorController.js";
@@ -24,8 +25,14 @@ adminRouter.post("/signup", adminSignUp);
 
 adminRouter.post("/login", adminLogin);
 
+// @desc fetch admin profile
+// @route GET  /api/admin/profile
+// @access Private
+
+adminRouter.get("/load-profile", isAuthAdmin, loadProfile);
+
 // @desc Logout
-// @route DELETE /api/admins/logout
+// @route DELETE /api/admin/logout
 // @access Private
 adminRouter.delete(
   "/logout",

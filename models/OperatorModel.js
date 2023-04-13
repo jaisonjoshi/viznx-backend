@@ -13,11 +13,22 @@ const DeployedDevices = mongoose.Schema({
     type: Date,
     required: true,
   },
-  session: {
-    sessionType: {
+  slot: {
+    slotType: {
       type: String,
       required: true,
-      enum: ["morning", "noon", "evening"],
+      enum: [
+        "slotOne",
+        "slotTwo",
+        "slotThree",
+        "slotFour",
+        "slotFive",
+        "slotSix",
+        "slotSeven",
+        "slotEight",
+        "slotNine",
+        "slotTen",
+      ],
     },
     noOfTimesPlayed: { type: String, default: 0 },
   },
